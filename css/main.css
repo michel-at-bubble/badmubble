@@ -13,6 +13,24 @@
   --color-red: #c01818;
   --color-red-light: #ff6b6b;
   --color-blue: #0050b0;
+  --color-blue-light: #6fa3ef; /* readable blue for text on dark backgrounds */
+  --color-amber: #ffb020;
+
+  /* Colour roles. Layout rules below only use these; a theme in css/themes/
+     overrides them. The defaults reproduce the original gold look. */
+  --role-title: var(--color-gold);
+  --role-heading: var(--color-gold);
+  --role-divider: linear-gradient(var(--color-gold), var(--color-gold));
+  --role-bar-background: var(--color-gold);
+  --role-bar-text: var(--color-background);
+  --role-score: var(--color-gold);
+  --role-points: var(--color-gold);
+  --role-link: var(--color-gold);
+  --role-toggle-background: var(--color-gold);
+  --role-toggle-text: var(--color-background);
+  --role-focus: var(--color-gold);
+  --role-warning: var(--color-red);
+  --role-warning-text: var(--color-red-light);
 
   --font-display: "Graduate", Georgia, serif;
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -33,7 +51,7 @@ body {
 }
 
 a {
-  color: var(--color-gold);
+  color: var(--role-link);
 }
 
 .visually-hidden {
@@ -55,7 +73,9 @@ a {
   max-width: 60rem;
   margin: 0 auto;
   padding: 1rem;
-  border-bottom: 2px solid var(--color-gold);
+  border-bottom: 3px solid transparent;
+  border-image-source: var(--role-divider);
+  border-image-slice: 1;
 }
 
 .site-logo {
@@ -78,7 +98,7 @@ h3 {
 
 h1 {
   margin: 0;
-  color: var(--color-gold);
+  color: var(--role-title);
   font-size: clamp(1.6rem, 5vw, 2.4rem);
 }
 
@@ -105,16 +125,16 @@ h1 {
 }
 
 .language-switch button[aria-pressed="true"] {
-  color: var(--color-background);
-  background: var(--color-gold);
-  border-color: var(--color-gold);
+  color: var(--role-toggle-text);
+  background: var(--role-toggle-background);
+  border-color: var(--role-toggle-background);
 }
 
 .language-switch button:focus-visible,
 .button:focus-visible,
 a:focus-visible,
 summary:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--role-focus);
   outline-offset: 2px;
 }
 
@@ -127,7 +147,7 @@ main {
 }
 
 h2 {
-  color: var(--color-gold);
+  color: var(--role-heading);
   font-size: 1.6rem;
   margin: 0.5rem 0 1rem;
 }
@@ -137,7 +157,7 @@ h2 {
 }
 
 .notice--error {
-  color: var(--color-red-light);
+  color: var(--role-warning-text);
 }
 
 /* Schedule */
@@ -159,8 +179,8 @@ h2 {
   margin: 0;
   padding: 0.6rem 1rem;
   font-size: 1.1rem;
-  color: var(--color-background);
-  background: var(--color-gold);
+  color: var(--role-bar-text);
+  background: var(--role-bar-background);
 }
 
 .round-month {
@@ -185,7 +205,7 @@ h2 {
 }
 
 .match--invalid {
-  border-left: 4px solid var(--color-red);
+  border-left: 4px solid var(--role-warning);
 }
 
 .match-line {
@@ -233,7 +253,7 @@ h2 {
 .score {
   font-family: var(--font-display);
   font-size: 1.4rem;
-  color: var(--color-gold);
+  color: var(--role-score);
 }
 
 .casualties {
@@ -249,7 +269,7 @@ h2 {
 .outcome--invalid {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--color-red-light);
+  color: var(--role-warning-text);
 }
 
 .match-details {
@@ -272,7 +292,7 @@ h2 {
 }
 
 .table-scroll:focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--role-focus);
   outline-offset: 2px;
 }
 
@@ -292,8 +312,8 @@ h2 {
 
 .standings thead th {
   font-size: 0.85rem;
-  color: var(--color-background);
-  background: var(--color-gold);
+  color: var(--role-bar-text);
+  background: var(--role-bar-background);
   border-top: none;
 }
 
@@ -315,7 +335,7 @@ h2 {
 
 .standings tbody .col-points {
   font-weight: 700;
-  color: var(--color-gold);
+  color: var(--role-points);
 }
 
 .standings-progress {
@@ -338,7 +358,7 @@ main > section + section {
 .issues {
   margin-bottom: 1.5rem;
   padding: 0.75rem 1rem;
-  border: 1px solid var(--color-red);
+  border: 1px solid var(--role-warning);
   border-radius: 0.5rem;
   background: var(--color-surface);
 }
@@ -346,7 +366,7 @@ main > section + section {
 .issues summary {
   cursor: pointer;
   font-weight: 600;
-  color: var(--color-red-light);
+  color: var(--role-warning-text);
 }
 
 .issues ul {

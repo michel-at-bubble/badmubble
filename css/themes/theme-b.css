@@ -1,0 +1,19 @@
+/* Option B, "Common ground": the red and white shared by both city shields
+   lead; Utrecht blue and Amersfoort gold are small, equal accents.
+   Red now means "structure", so warnings use amber instead. */
+
+:root {
+  --role-title: #ffffff;
+  --role-heading: #ffffff;
+  --role-divider: linear-gradient(90deg, var(--color-blue) 50%, var(--color-gold) 50%);
+  --role-bar-background: var(--color-red);
+  --role-bar-text: #ffffff;
+  --role-score: #ffffff;
+  --role-points: var(--color-gold);
+  --role-link: var(--color-blue-light);
+  --role-toggle-background: var(--color-red);
+  --role-toggle-text: #ffffff;
+  --role-focus: #ffffff;
+  --role-warning: var(--color-amber);
+  --role-warning-text: var(--color-amber);
+}

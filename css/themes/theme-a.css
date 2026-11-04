@@ -1,0 +1,19 @@
+/* Option A, "Split": Utrecht blue and Amersfoort gold as equal partners.
+   Structure (bars) in blue, results and highlights in gold, the header
+   divider split half blue / half gold like the logo's sky. */
+
+:root {
+  --role-title: var(--color-gold);
+  --role-heading: var(--color-text);
+  --role-divider: linear-gradient(90deg, var(--color-blue) 50%, var(--color-gold) 50%);
+  --role-bar-background: var(--color-blue);
+  --role-bar-text: #ffffff;
+  --role-score: var(--color-gold);
+  --role-points: var(--color-gold);
+  --role-link: var(--color-gold);
+  --role-toggle-background: var(--color-gold);
+  --role-toggle-text: var(--color-background);
+  --role-focus: var(--color-gold);
+  --role-warning: var(--color-red);
+  --role-warning-text: var(--color-red-light);
+}
