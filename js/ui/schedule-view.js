@@ -1,5 +1,6 @@
 // Renders the schedule. Sheet content is only ever inserted as text, never as HTML.
 
+import { isAwaitingResult, leagueToday } from "../domain/calendar.js";
 import { PLAYOFF_PHASES, RESULT_STATUS } from "../domain/match-contract.js";
 import { resolvePlayoffs } from "../domain/playoffs.js";
 import { buildScheduleSections, issuesByRow } from "../domain/schedule.js";
@@ -43,7 +44,7 @@ function renderParticipant(match, side, view) {
   return element("div", { className: `participant participant--${side}` }, children);
 }
 
-function renderOutcome(match, isInvalid, { translate }) {
+function renderOutcome(match, isInvalid, { translate, today }) {
   if (isInvalid) {
     return element("div", { className: "outcome outcome--invalid", text: translate("statusInvalid") });
   }
@@ -61,7 +62,9 @@ function renderOutcome(match, isInvalid, { translate }) {
     }
     return element("div", { className: "outcome outcome--complete" }, children);
   }
-  const key = match.resultStatus === RESULT_STATUS.PARTIAL ? "statusPartial" : "statusScheduled";
+  let key = "statusScheduled";
+  if (match.resultStatus === RESULT_STATUS.PARTIAL) key = "statusPartial";
+  else if (isAwaitingResult(match, today)) key = "statusAwaitingResult";
   return element("div", { className: "outcome outcome--pending", text: translate(key) });
 }
 
@@ -145,6 +148,7 @@ export function renderSchedule(container, { matches, issues }, { language, trans
     translate,
     rowIssues: issuesByRow(issues),
     playoffs: resolvePlayoffs(matches, issues),
+    today: leagueToday(),
   };
   const children = [];
 
