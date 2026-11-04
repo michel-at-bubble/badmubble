@@ -6,7 +6,7 @@ export const DEFAULT_LANGUAGE = "nl";
 
 const TRANSLATIONS = Object.freeze({
   nl: {
-    tagline: "Blood Bowl-competitie Utrecht – Amersfoort",
+    tagline: "Blood Bowl league Utrecht – Amersfoort",
     scheduleHeading: "Speelschema",
     languageLabel: "Taal",
     loading: "Gegevens laden…",
