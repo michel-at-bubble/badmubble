@@ -14,7 +14,7 @@ An empty template with the column headers is available at [`templates/matches-te
 | `phase` | `group`, `semifinal` or `final` | always | Competition phase, lowercase. |
 | `round` | text | always | Round label, e.g. `1`, `2`, `SF`, `F`. |
 | `scheduled_month` | `YYYY-MM` | always | Month in which the match is scheduled. |
-| `match_date` | `YYYY-MM-DD` | no | Date the match was actually played. |
+| `match_date` | `YYYY-MM-DD` | no | Date of the match: planned in advance or filled in afterwards. Shown as "scheduled for" until the result is complete, then as "played on". |
 | `home_slot` | slot | playoffs only | Where the home participant qualifies from (see below). |
 | `home_coach` | text | group: always; playoffs: once known | Coach name. |
 | `home_race` | text | no | Race chosen by the home coach. |

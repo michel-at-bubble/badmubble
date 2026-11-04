@@ -79,7 +79,9 @@ function isHttpUrl(value) {
 function renderMatchDetails(match, { language, translate }) {
   const details = [];
   if (match.match_date !== "") {
-    details.push(element("span", { text: translate("playedOn", { date: formatDate(match.match_date, language) }) }));
+    // The date may be entered before the match is played; only a complete result makes it "played".
+    const key = match.resultStatus === RESULT_STATUS.COMPLETE ? "playedOn" : "scheduledOn";
+    details.push(element("span", { text: translate(key, { date: formatDate(match.match_date, language) }) }));
   }
   if (match.ruleset_name !== "" || match.ruleset_url !== "") {
     const label = `${translate("ruleset")}: ${match.ruleset_name || match.ruleset_url}`;
