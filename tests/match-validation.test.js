@@ -246,6 +246,13 @@ describe("validateMatches", () => {
     assert.deepEqual(codes(issues), ["invalid-slot"]);
   });
 
+  it("uses supplied row numbers in matches and issues", () => {
+    const { matches, issues } = validateMatches([groupMatch(), groupMatch()], [2, 5]);
+    assert.deepEqual(matches.map((match) => match.row), [2, 5]);
+    assert.equal(issues[0].row, 5);
+    assert.match(issues[0].message, /row 2/);
+  });
+
   it("includes row number and match id in every issue", () => {
     const { issues } = validateMatches([groupMatch(), groupMatch({ match_id: "TEST-G02", home_td: "-1" })]);
     assert.equal(issues.length, 1);

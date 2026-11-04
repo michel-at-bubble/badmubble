@@ -28,7 +28,7 @@ const SIDES = Object.freeze([
 
 /**
  * @typedef {object} ValidationIssue
- * @property {number|null} row      1-based data row number (excluding header), or null for header issues
+ * @property {number|null} row      row number of the record (see validateMatches), or null for header issues
  * @property {string|null} matchId
  * @property {string|null} field
  * @property {string} code
@@ -174,14 +174,16 @@ export function validateMatch(record, rowNumber) {
 /**
  * Validates all records, including checks that span rows.
  * @param {Record<string, string>[]} records
+ * @param {number[]} [rowNumbers] row number reported for each record; defaults to 1, 2, 3, …
+ *   The data layer passes spreadsheet row numbers so issues point at the row the administrator sees.
  * @returns {{ matches: object[], issues: ValidationIssue[] }}
  */
-export function validateMatches(records) {
+export function validateMatches(records, rowNumbers = records.map((_, index) => index + 1)) {
   const matches = [];
   const issues = [];
 
   records.forEach((record, index) => {
-    const result = validateMatch(record, index + 1);
+    const result = validateMatch(record, rowNumbers[index]);
     matches.push(result.match);
     issues.push(...result.issues);
   });
