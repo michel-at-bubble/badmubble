@@ -59,6 +59,11 @@ describe("formatting", () => {
     assert.equal(formatDate("2000-01-05", "en"), "5 January 2000");
   });
 
+  it("returns invalid months and dates unchanged instead of failing or guessing", () => {
+    for (const value of ["January 2000", "2000-13", "01-2000"]) assert.equal(formatMonth(value, "nl"), value);
+    for (const value of ["15/01/2000", "2000-02-30", "2000-1-5"]) assert.equal(formatDate(value, "nl"), value);
+  });
+
   it("describes qualification slots", () => {
     const translate = createTranslator("en");
     assert.equal(describeSlot("group:1", translate), "Group stage #1");

@@ -1,6 +1,8 @@
 // Interface texts and locale-aware formatting (Dutch and English).
 // Competition data (names, races, rulesets) is never translated.
 
+import { isValidDate, isValidMonth } from "../domain/match-validation.js";
+
 export const LANGUAGES = Object.freeze(["nl", "en"]);
 export const DEFAULT_LANGUAGE = "nl";
 
@@ -154,15 +156,21 @@ export function createTranslator(language) {
   };
 }
 
-/** Formats a validated `YYYY-MM` value, e.g. "november 2026" / "November 2026". */
+/**
+ * Formats a `YYYY-MM` value, e.g. "november 2026" / "November 2026".
+ * Invalid values are returned unchanged: they are reported as validation
+ * issues and must not break or silently alter the page.
+ */
 export function formatMonth(value, language) {
+  if (!isValidMonth(value)) return value;
   const [year, month] = value.split("-").map(Number);
   return new Intl.DateTimeFormat(language, { month: "long", year: "numeric", timeZone: "UTC" })
     .format(new Date(Date.UTC(year, month - 1, 1)));
 }
 
-/** Formats a validated `YYYY-MM-DD` value, e.g. "14 november 2026" / "14 November 2026". */
+/** Formats a `YYYY-MM-DD` value, e.g. "14 november 2026". Invalid values are returned unchanged. */
 export function formatDate(value, language) {
+  if (!isValidDate(value)) return value;
   const [year, month, day] = value.split("-").map(Number);
   return new Intl.DateTimeFormat(language === "en" ? "en-GB" : language, {
     day: "numeric",

@@ -59,14 +59,14 @@ export function getResultStatus(record) {
   return RESULT_STATUS.PARTIAL;
 }
 
-function isValidMonth(value) {
+export function isValidMonth(value) {
   const match = MONTH_PATTERN.exec(value);
   if (!match) return false;
   const month = Number(match[2]);
   return month >= 1 && month <= 12;
 }
 
-function isValidDate(value) {
+export function isValidDate(value) {
   const match = DATE_PATTERN.exec(value);
   if (!match) return false;
   const [year, month, day] = match.slice(1).map(Number);
