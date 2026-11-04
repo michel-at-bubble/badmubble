@@ -5,7 +5,7 @@
 :root {
   --role-title: #ffffff;
   --role-heading: #ffffff;
-  --role-divider: linear-gradient(90deg, var(--color-blue), var(--color-gold));
+  --role-divider: linear-gradient(90deg, var(--color-blue), var(--color-red), var(--color-gold));
   --role-bar-background: var(--color-red);
   --role-bar-text: #ffffff;
   --role-score: #ffffff;

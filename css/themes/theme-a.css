@@ -1,11 +1,11 @@
 /* Option A, "Split": Utrecht blue and Amersfoort gold as equal partners.
    Structure (bars) in blue, results and highlights in gold, the header
-   divider a blue-to-gold gradient, like the logo's sky. */
+   divider a blue-red-gold gradient (red: the colour both city shields share). */
 
 :root {
   --role-title: var(--color-gold);
   --role-heading: var(--color-text);
-  --role-divider: linear-gradient(90deg, var(--color-blue), var(--color-gold));
+  --role-divider: linear-gradient(90deg, var(--color-blue), var(--color-red), var(--color-gold));
   --role-bar-background: var(--color-blue);
   --role-bar-text: #ffffff;
   --role-score: var(--color-gold);

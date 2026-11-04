@@ -310,10 +310,15 @@ h2 {
   border-top: 1px solid var(--color-border);
 }
 
+/* The background sits on the row, not the cells, so a gradient spans the
+   whole header instead of restarting in every cell. */
+.standings thead tr {
+  background: var(--role-bar-background);
+}
+
 .standings thead th {
   font-size: 0.85rem;
   color: var(--role-bar-text);
-  background: var(--role-bar-background);
   border-top: none;
 }
 

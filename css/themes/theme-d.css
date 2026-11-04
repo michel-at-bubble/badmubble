@@ -1,0 +1,24 @@
+/* Option D: option A with the blue-red-gold gradient also in the header bars
+   (standings table header and schedule round headers).
+
+   White header text is unreadable on bright gold (contrast 1.71), so the bar
+   gradient ends in a darker gold that keeps white text readable (4.63). The
+   divider has no text and keeps the bright gold. */
+
+:root {
+  --color-gold-dark: #946f00;
+
+  --role-title: var(--color-gold);
+  --role-heading: var(--color-text);
+  --role-divider: linear-gradient(90deg, var(--color-blue), var(--color-red), var(--color-gold));
+  --role-bar-background: linear-gradient(90deg, var(--color-blue), var(--color-red), var(--color-gold-dark));
+  --role-bar-text: #ffffff;
+  --role-score: var(--color-gold);
+  --role-points: var(--color-gold);
+  --role-link: var(--color-gold);
+  --role-toggle-background: var(--color-gold);
+  --role-toggle-text: var(--color-background);
+  --role-focus: var(--color-gold);
+  --role-warning: var(--color-red);
+  --role-warning-text: var(--color-red-light);
+}

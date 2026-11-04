@@ -1,7 +1,7 @@
-// TEMPORARY: lets reviewers compare colour schemes via ?theme=a|b|c and a
+// TEMPORARY: lets reviewers compare colour schemes via ?theme=a|b|c|d and a
 // small switcher. Remove this file (and its <script> tag) once a theme is chosen.
 
-const THEMES = ["a", "b", "c"];
+const THEMES = ["a", "b", "c", "d"];
 const params = new URLSearchParams(window.location.search);
 const current = THEMES.includes(params.get("theme")) ? params.get("theme") : "";
 
