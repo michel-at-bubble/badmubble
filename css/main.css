@@ -35,6 +35,8 @@
   --role-focus: var(--color-gold);
   --role-warning: var(--color-red);
   --role-warning-text: var(--color-red-light);
+  --role-qualified: var(--color-gold);
+  --role-cutoff: var(--color-gold-tint);
 
   --font-display: "Graduate", Georgia, serif;
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -265,6 +267,12 @@ h2 {
   color: var(--color-text-muted);
 }
 
+.outcome-note {
+  margin-top: 0.15rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
 .outcome--pending {
   font-size: 0.85rem;
   color: var(--color-text-muted);
@@ -345,6 +353,21 @@ h2 {
 .standings tbody .col-points {
   font-weight: 700;
   color: var(--role-points);
+}
+
+/* Qualification for the playoffs */
+
+.standings-row--in > :first-child,
+.standings-row--boundary > :first-child {
+  box-shadow: inset 3px 0 0 var(--role-qualified);
+}
+
+.standings tbody .standings-row--in .col-position {
+  color: var(--role-qualified);
+}
+
+.standings-row--cutoff > * {
+  border-bottom: 2px solid var(--role-cutoff);
 }
 
 .standings-progress {

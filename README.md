@@ -80,8 +80,8 @@ Done:
 - Phase 2: reading the sheet (CSV export, parser, loader), `check-sheet` helper.
 - Phase 3: bilingual schedule page with results, playoff slots and data-issue reporting.
 - Phase 4: group standings.
-
-Not yet implemented: playoff qualification, deployment.
+- Deployment: GitHub Pages at https://badmubble.blood-bowl.nl (pushes to `main` go live).
+- Phase 5: playoffs (qualification marker, participants from standings and results).
 
 ## Competition rules
 
@@ -92,4 +92,11 @@ Implemented in `js/domain/standings.js` and `js/domain/competition-rules.js`:
 - No further tiebreakers have been established. Coaches still level share a position (shown as `1=`) and are listed alphabetically for display only.
 - Only complete group matches without validation issues count. Partial results and playoff matches never count.
 
-Not yet established: tiebreakers beyond net TD + net CAS, and how a shared position at the qualification boundary (4th/5th) is resolved.
+Playoffs, in `js/domain/playoffs.js`:
+
+- A coach entered in a playoff row is always shown as entered.
+- An empty playoff side is filled from its slot: `group:N` from the final standings once every group match is complete and valid; `winner:<match_id>` once that match has a complete result.
+- The number of qualifying places is the highest `group:N` in the sheet (not configured in code).
+- A shared position across the cut-off, or a drawn playoff match, leaves the slot open: no rule has been established for these.
+
+Not yet established: tiebreakers beyond net TD + net CAS, how a shared position at the qualification cut-off is resolved, and what happens after a drawn playoff match.

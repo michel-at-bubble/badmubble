@@ -24,8 +24,15 @@ const TRANSLATIONS = Object.freeze({
     casualties: "CAS",
     ruleset: "Regels",
     slotGroup: "Nr. {position} groepsfase",
-    slotWinner: "Winnaar {matchId}",
+    slotWinner: "Winnaar {match}",
+    matchSemifinal: "halve finale",
+    matchFinal: "finale",
+    slotSharedPosition: "Gedeelde positie, nog niet beslist",
+    slotAfterDraw: "Gelijkspel, nog geen winnaar",
+    playoffDraw: "Gelijkspel: winnaar nog niet vastgesteld",
     toBeDetermined: "Nog onbekend",
+    qualificationNote: "Nr. 1–{places} plaatsen zich voor de halve finales.",
+    qualificationBoundary: "? = gedeelde positie op de grens. Nog niet beslist wie doorgaat.",
     issuesSummary: "Fouten in het spreadsheet ({count})",
     issueRow: "Regel {row}",
     issueHeader: "Kopregel",
@@ -76,8 +83,15 @@ const TRANSLATIONS = Object.freeze({
     casualties: "CAS",
     ruleset: "Rules",
     slotGroup: "Group stage #{position}",
-    slotWinner: "Winner {matchId}",
+    slotWinner: "Winner {match}",
+    matchSemifinal: "semifinal",
+    matchFinal: "final",
+    slotSharedPosition: "Shared position, not yet decided",
+    slotAfterDraw: "Draw, no winner yet",
+    playoffDraw: "Draw: winner not yet determined",
     toBeDetermined: "To be determined",
+    qualificationNote: "Places 1–{places} qualify for the semifinals.",
+    qualificationBoundary: "? = shared position at the cut-off. Not yet decided who goes through.",
     issuesSummary: "Errors in the spreadsheet ({count})",
     issueRow: "Row {row}",
     issueHeader: "Header row",
@@ -156,11 +170,25 @@ export function formatDate(value, language) {
   }).format(new Date(Date.UTC(year, month - 1, day)));
 }
 
+/**
+ * Names a playoff match for display, e.g. "halve finale 1" / "semifinal 1".
+ * Falls back to the match id for matches without a playoff label.
+ * @param {Map<string, { phase: string, number: number|null }>} labels see playoffMatchLabels
+ */
+export function describeMatch(matchId, labels, translate) {
+  const label = labels.get(matchId);
+  if (!label) return matchId;
+  const name = translate(label.phase === "final" ? "matchFinal" : "matchSemifinal");
+  return label.number === null ? name : `${name} ${label.number}`;
+}
+
 /** Describes a qualification slot (`group:N` / `winner:ID`) for display. */
-export function describeSlot(slot, translate) {
-  const [kind, value] = slot.split(":");
+export function describeSlot(slot, translate, labels = new Map()) {
+  const separator = slot.indexOf(":");
+  const kind = slot.slice(0, separator);
+  const value = slot.slice(separator + 1);
   if (kind === "group") return translate("slotGroup", { position: value });
-  if (kind === "winner") return translate("slotWinner", { matchId: value });
+  if (kind === "winner") return translate("slotWinner", { match: describeMatch(value, labels, translate) });
   return slot;
 }
 

@@ -65,6 +65,20 @@ describe("formatting", () => {
     assert.equal(describeSlot("winner:TEST-SF1", translate), "Winner TEST-SF1");
   });
 
+  it("names winner slots after the referenced playoff match", () => {
+    const labels = new Map([
+      ["TEST-SF1", { phase: "semifinal", number: 1 }],
+      ["TEST-F", { phase: "final", number: null }],
+    ]);
+    assert.equal(describeSlot("winner:TEST-SF1", createTranslator("nl"), labels), "Winnaar halve finale 1");
+    assert.equal(describeSlot("winner:TEST-SF1", createTranslator("en"), labels), "Winner semifinal 1");
+    assert.equal(describeSlot("winner:TEST-F", createTranslator("en"), labels), "Winner final");
+  });
+
+  it("keeps match ids containing a colon intact", () => {
+    assert.equal(describeSlot("winner:A:1", createTranslator("en")), "Winner A:1");
+  });
+
   it("titles sections by phase", () => {
     const translate = createTranslator("nl");
     assert.equal(sectionTitle({ phase: "group", round: "2" }, translate), "Ronde 2");

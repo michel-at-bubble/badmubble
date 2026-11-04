@@ -1,11 +1,13 @@
 // Renders the group standings table. Sheet content is only inserted as text.
 
 import { PHASES } from "../domain/match-contract.js";
+import { isGroupStageComplete, qualificationByCoach, qualifyingPlaces } from "../domain/playoffs.js";
+import { issuesByRow } from "../domain/schedule.js";
 import { computeStandings } from "../domain/standings.js";
 import { element } from "./dom.js";
 
 const COLUMNS = [
-  { key: "colPosition", title: "colPositionTitle", className: "col-position", value: (row) => (row.sharedPosition ? `${row.position}=` : String(row.position)) },
+  { key: "colPosition", title: "colPositionTitle", className: "col-position", value: formatPosition },
   { key: "colCoach", className: "col-coach", value: (row) => row.coach, isRowHeader: true },
   { key: "colPlayed", title: "colPlayedTitle", value: (row) => String(row.played) },
   { key: "colWon", title: "colWonTitle", value: (row) => String(row.won) },
@@ -16,6 +18,11 @@ const COLUMNS = [
   { key: "colNet", title: "colNetTitle", value: (row) => formatSigned(row.tiebreaker) },
   { key: "colPoints", title: "colPointsTitle", className: "col-points", value: (row) => String(row.points) },
 ];
+
+function formatPosition(row) {
+  const position = row.sharedPosition ? `${row.position}=` : String(row.position);
+  return row.qualification === "boundary" ? `${position}?` : position;
+}
 
 function formatSigned(value) {
   if (value > 0) return `+${value}`;
@@ -48,13 +55,33 @@ export function renderStandings(container, { matches, issues }, { translate }) {
 
   const totalGroupMatches = matches.filter((match) => match.phase === PHASES.GROUP).length;
 
+  // Qualification follows from the group:N slots in the sheet; without playoff rows there is none.
+  // A shared position across the cut-off is only flagged as undecided once the
+  // group stage is over; during the season such ties are normal and temporary.
+  const places = qualifyingPlaces(matches);
+  const groupComplete = isGroupStageComplete(matches, issuesByRow(issues));
+  const qualification = qualificationByCoach(standings.rows, places);
+  const rows = standings.rows.map((row) => {
+    let status = places > 0 ? qualification.get(row.coach) : null;
+    if (status === "boundary" && !groupComplete) status = "open";
+    return { ...row, qualification: status };
+  });
+  const lastQualifyingIndex = rows.findLastIndex((row) => row.qualification === "in" || row.qualification === "boundary");
+  const rowClass = (row, index) =>
+    [
+      row.qualification ? `standings-row--${row.qualification}` : "",
+      index === lastQualifyingIndex && index < rows.length - 1 ? "standings-row--cutoff" : "",
+    ].filter(Boolean).join(" ");
+
   const table = element("table", { className: "standings" }, [
     element("caption", { className: "visually-hidden", text: translate("standingsCaption") }),
     element("thead", {}, [element("tr", {}, COLUMNS.map((column) => headerCell(column, translate)))]),
     element(
       "tbody",
       {},
-      standings.rows.map((row) => element("tr", {}, COLUMNS.map((column) => bodyCell(column, row)))),
+      rows.map((row, index) =>
+        element("tr", { className: rowClass(row, index) || undefined }, COLUMNS.map((column) => bodyCell(column, row))),
+      ),
     ),
   ]);
 
@@ -72,8 +99,14 @@ export function renderStandings(container, { matches, issues }, { translate }) {
     }),
     element("p", { className: "standings-note", text: translate("standingsRule") }),
   ];
+  if (places > 0) {
+    notes.push(element("p", { className: "standings-note", text: translate("qualificationNote", { places }) }));
+  }
   if (standings.hasSharedPositions) {
     notes.push(element("p", { className: "standings-note", text: translate("standingsShared") }));
+  }
+  if (rows.some((row) => row.qualification === "boundary")) {
+    notes.push(element("p", { className: "standings-note", text: translate("qualificationBoundary") }));
   }
 
   container.replaceChildren(scroller, ...notes);

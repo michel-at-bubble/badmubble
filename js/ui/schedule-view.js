@@ -1,40 +1,65 @@
 // Renders the schedule. Sheet content is only ever inserted as text, never as HTML.
 
-import { RESULT_STATUS } from "../domain/match-contract.js";
+import { PLAYOFF_PHASES, RESULT_STATUS } from "../domain/match-contract.js";
+import { resolvePlayoffs } from "../domain/playoffs.js";
 import { buildScheduleSections, issuesByRow } from "../domain/schedule.js";
 import { element } from "./dom.js";
 import { describeSlot, formatDate, formatMonth, sectionTitle } from "./i18n.js";
 
-function renderParticipant(match, side, translate) {
-  const coach = match[`${side}_coach`];
+// Notes shown under an open playoff slot, for reasons a visitor may wonder about.
+const OPEN_SLOT_NOTES = {
+  "shared-position": "slotSharedPosition",
+  draw: "slotAfterDraw",
+};
+
+/**
+ * Who plays on one side. For playoff matches the participant comes from the
+ * playoff resolution: the sheet's coach, or one derived from standings/results.
+ */
+function participantFor(match, side, view) {
   const slot = match[`${side}_slot`];
+  const resolved = view.playoffs.participants.get(match.row)?.[side];
+  if (resolved) return { coach: resolved.coach, slot, reason: resolved.reason };
+  return { coach: match[`${side}_coach`], slot, reason: null };
+}
+
+function renderParticipant(match, side, view) {
+  const { translate, playoffs } = view;
+  const participant = participantFor(match, side, view);
   const race = match[`${side}_race`];
+  const slotText = participant.slot !== "" ? describeSlot(participant.slot, translate, playoffs.labels) : "";
 
   const children = [];
-  if (coach !== "") {
-    children.push(element("span", { className: "coach", text: coach }));
-    if (slot !== "") children.push(element("span", { className: "slot", text: describeSlot(slot, translate) }));
+  if (participant.coach !== "") {
+    children.push(element("span", { className: "coach", text: participant.coach }));
+    if (slotText !== "") children.push(element("span", { className: "slot", text: slotText }));
   } else {
-    const label = slot !== "" ? describeSlot(slot, translate) : translate("toBeDetermined");
-    children.push(element("span", { className: "coach coach--unknown", text: label }));
+    children.push(element("span", { className: "coach coach--unknown", text: slotText || translate("toBeDetermined") }));
+    const note = OPEN_SLOT_NOTES[participant.reason];
+    if (note) children.push(element("span", { className: "slot", text: translate(note) }));
   }
   if (race !== "") children.push(element("span", { className: "race", text: race }));
 
   return element("div", { className: `participant participant--${side}` }, children);
 }
 
-function renderOutcome(match, isInvalid, translate) {
+function renderOutcome(match, isInvalid, { translate }) {
   if (isInvalid) {
     return element("div", { className: "outcome outcome--invalid", text: translate("statusInvalid") });
   }
   if (match.resultStatus === RESULT_STATUS.COMPLETE) {
-    return element("div", { className: "outcome outcome--complete" }, [
+    const children = [
       element("span", { className: "score", text: `${match.home_td} – ${match.away_td}` }),
       element("span", {
         className: "casualties",
         text: `${translate("casualties")} ${match.home_cas} – ${match.away_cas}`,
       }),
-    ]);
+    ];
+    // No rule for drawn playoff matches has been established, so no winner is named.
+    if (PLAYOFF_PHASES.includes(match.phase) && match.home_td === match.away_td) {
+      children.push(element("span", { className: "outcome-note", text: translate("playoffDraw") }));
+    }
+    return element("div", { className: "outcome outcome--complete" }, children);
   }
   const key = match.resultStatus === RESULT_STATUS.PARTIAL ? "statusPartial" : "statusScheduled";
   return element("div", { className: "outcome outcome--pending", text: translate(key) });
@@ -51,7 +76,7 @@ function isHttpUrl(value) {
   }
 }
 
-function renderMatchDetails(match, language, translate) {
+function renderMatchDetails(match, { language, translate }) {
   const details = [];
   if (match.match_date !== "") {
     details.push(element("span", { text: translate("playedOn", { date: formatDate(match.match_date, language) }) }));
@@ -67,32 +92,28 @@ function renderMatchDetails(match, language, translate) {
   return details.length > 0 ? element("p", { className: "match-details" }, details) : null;
 }
 
-function renderMatch(match, rowIssues, language, translate) {
-  const isInvalid = rowIssues.length > 0;
+function renderMatch(match, view) {
+  const isInvalid = (view.rowIssues.get(match.row) ?? []).length > 0;
   const item = element("li", { className: isInvalid ? "match match--invalid" : "match" }, [
     element("div", { className: "match-line" }, [
-      renderParticipant(match, "home", translate),
-      renderOutcome(match, isInvalid, translate),
-      renderParticipant(match, "away", translate),
+      renderParticipant(match, "home", view),
+      renderOutcome(match, isInvalid, view),
+      renderParticipant(match, "away", view),
     ]),
   ]);
-  const details = renderMatchDetails(match, language, translate);
+  const details = renderMatchDetails(match, view);
   if (details) item.append(details);
   return item;
 }
 
-function renderSection(section, rowIssues, language, translate) {
-  const months = section.scheduledMonths.map((month) => formatMonth(month, language)).join(" / ");
+function renderSection(section, view) {
+  const months = section.scheduledMonths.map((month) => formatMonth(month, view.language)).join(" / ");
   return element("section", { className: "round" }, [
     element("h3", { className: "round-title" }, [
-      element("span", { text: sectionTitle(section, translate) }),
+      element("span", { text: sectionTitle(section, view.translate) }),
       element("span", { className: "round-month", text: months }),
     ]),
-    element(
-      "ol",
-      { className: "match-list" },
-      section.matches.map((match) => renderMatch(match, rowIssues.get(match.row) ?? [], language, translate)),
-    ),
+    element("ol", { className: "match-list" }, section.matches.map((match) => renderMatch(match, view))),
   ]);
 }
 
@@ -117,14 +138,19 @@ function renderIssues(issues, translate) {
 /** Replaces the container's content with the schedule. */
 export function renderSchedule(container, { matches, issues }, { language, translate }) {
   const sections = buildScheduleSections(matches);
-  const rowIssues = issuesByRow(issues);
+  const view = {
+    language,
+    translate,
+    rowIssues: issuesByRow(issues),
+    playoffs: resolvePlayoffs(matches, issues),
+  };
   const children = [];
 
   if (issues.length > 0) children.push(renderIssues(issues, translate));
   if (sections.length === 0) {
     children.push(element("p", { className: "notice", text: translate("empty") }));
   }
-  children.push(...sections.map((section) => renderSection(section, rowIssues, language, translate)));
+  children.push(...sections.map((section) => renderSection(section, view)));
 
   container.replaceChildren(...children);
 }
