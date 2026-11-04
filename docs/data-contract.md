@@ -87,6 +87,7 @@ Validation is generic: it does not assume a number of coaches, rounds or a parti
 | `unknown-slot-match` | A `winner:` slot references a `match_id` that does not exist. |
 | `result-without-coaches` | A result value is entered while a coach is still unknown. |
 | `duplicate-id` | `match_id` is used on more than one row. |
+| `inconsistent-coach-name` | A coach name differs from an earlier row only in case or spacing (e.g. `Coach A` vs `coach a`). |
 
 Matching of `match_id` values (duplicates and `winner:` references) is exact and case-sensitive.
 

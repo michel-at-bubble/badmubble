@@ -246,6 +246,24 @@ describe("validateMatches", () => {
     assert.deepEqual(codes(issues), ["invalid-slot"]);
   });
 
+  it("reports coach names that differ only in case or spacing", () => {
+    const { issues } = validateMatches([
+      groupMatch(),
+      groupMatch({ match_id: "TEST-G02", home_coach: "coach a", away_coach: "Coach  B" }),
+    ]);
+    assert.deepEqual(codes(issues), ["inconsistent-coach-name", "inconsistent-coach-name"]);
+    assert.deepEqual(issues.map((entry) => entry.field), ["home_coach", "away_coach"]);
+    assert.match(issues[0].message, /row 1/);
+  });
+
+  it("accepts the same coach name spelled identically on many rows", () => {
+    const { issues } = validateMatches([
+      groupMatch(),
+      groupMatch({ match_id: "TEST-G02", home_coach: "Coach B", away_coach: "Coach A" }),
+    ]);
+    assert.deepEqual(issues, []);
+  });
+
   it("uses supplied row numbers in matches and issues", () => {
     const { matches, issues } = validateMatches([groupMatch(), groupMatch()], [2, 5]);
     assert.deepEqual(matches.map((match) => match.row), [2, 5]);

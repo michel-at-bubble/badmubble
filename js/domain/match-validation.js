@@ -206,6 +206,31 @@ export function validateMatches(records, rowNumbers = records.map((_, index) => 
     }
   }
 
+  // Coaches are identified by their exact name, so spellings that differ only in
+  // case or spacing would silently split one coach into two.
+  const firstSpelling = new Map();
+  for (const match of matches) {
+    for (const side of SIDES) {
+      const name = match[side.coach];
+      if (name === "") continue;
+      const key = name.toLowerCase().replace(/\s+/g, " ");
+      if (!firstSpelling.has(key)) {
+        firstSpelling.set(key, { name, row: match.row });
+      } else if (firstSpelling.get(key).name !== name) {
+        const first = firstSpelling.get(key);
+        issues.push(
+          issue(
+            match.row,
+            match.match_id,
+            side.coach,
+            "inconsistent-coach-name",
+            `"${name}" is spelled differently from "${first.name}" on row ${first.row}.`,
+          ),
+        );
+      }
+    }
+  }
+
   for (const match of matches) {
     for (const side of SIDES) {
       const slotMatch = SLOT_PATTERN.exec(match[side.slot]);
