@@ -20,16 +20,18 @@ Static HTML, CSS and vanilla JavaScript (ES modules), with no backend, framework
 index.html                  page shell
 css/                        project-specific styling
 images/                     logo (512 px web version) and favicons
+js/main.js                  entry point: language, loading, rendering
 js/config.js                which spreadsheet and worksheet to read
 js/data/                    fetching and parsing the sheet's CSV export
-js/domain/                  pure logic: data contract, validation (no DOM, no network)
+js/domain/                  pure logic: data contract, validation, schedule grouping (no DOM, no network)
+js/ui/                      rendering and interface texts (Dutch/English)
 docs/                       data contract
 scripts/                    development helpers
 templates/                  empty spreadsheet template (headers only)
 tests/                      automated tests and synthetic fixtures
 ```
 
-`js/ui/` (rendering) will be added with the first page that shows data.
+The interface language follows `?lang=nl` / `?lang=en`, otherwise the browser language, with Dutch as the fallback. Sheet content is always inserted as text, never as HTML.
 
 Dependencies flow `ui → data → domain`. Domain code imports nothing outside `js/domain/`.
 
@@ -76,5 +78,6 @@ It exits with code 1 if there are data issues and 2 if the sheet cannot be loade
 Done:
 - Phase 1: repository skeleton, `Matches` data contract, spreadsheet template, match validation.
 - Phase 2: reading the sheet (CSV export, parser, loader), `check-sheet` helper.
+- Phase 3: bilingual schedule page with results, playoff slots and data-issue reporting.
 
-Not yet implemented: user interface (bilingual NL/EN), standings, tiebreakers, playoff qualification, deployment.
+Not yet implemented: standings, tiebreakers, playoff qualification, deployment.

@@ -8,14 +8,38 @@
   <meta name="theme-color" content="#0a0a0a">
   <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Graduate&display=swap">
   <link rel="stylesheet" href="css/main.css">
+  <script type="module" src="js/main.js"></script>
 </head>
 <body>
-  <main>
+  <header class="site-header">
     <img class="site-logo" src="images/badmubble-logo-512.jpg" width="512" height="512"
          alt="Bad Mubble League logo">
-    <h1>Bad Mubble League</h1>
-    <p>Blood Bowl league. Schedule and standings will appear here.</p>
+    <div class="site-title">
+      <h1>Bad Mubble League</h1>
+      <p class="tagline" data-i18n="tagline">Blood Bowl-competitie Utrecht – Amersfoort</p>
+    </div>
+    <nav class="language-switch" aria-labelledby="language-label">
+      <span id="language-label" class="visually-hidden" data-i18n="languageLabel">Taal</span>
+      <button type="button" data-language="nl" aria-pressed="true">NL</button>
+      <button type="button" data-language="en" aria-pressed="false">EN</button>
+    </nav>
+  </header>
+
+  <main>
+    <section aria-labelledby="schedule-heading">
+      <h2 id="schedule-heading" data-i18n="scheduleHeading">Speelschema</h2>
+      <div id="schedule-content" aria-live="polite">
+        <noscript><p class="notice">Het speelschema heeft JavaScript nodig. / The schedule requires JavaScript.</p></noscript>
+      </div>
+    </section>
   </main>
+
+  <footer class="site-footer">
+    <p data-i18n="footer">De gegevens komen uit het spreadsheet van de competitieleider.</p>
+  </footer>
 </body>
 </html>
