@@ -1,6 +1,8 @@
 /* Project-specific styling for Badmubble. Shared styling belongs in blood-bowl-nl-assets. */
 
-/* Palette sampled from images/badmubble-logo-512.jpg */
+/* Palette sampled from images/badmubble-logo-512.jpg.
+   Blue (Utrecht) and gold (Amersfoort) are balanced, joined by the red that
+   both city shields share. */
 :root {
   --color-background: #0a0a0a;
   --color-surface: #161616;
@@ -9,19 +11,21 @@
   --color-text: #f2f2f2;
   --color-text-muted: #a8a8a8;
   --color-gold: #f0c018;
-  --color-gold-deep: #d8a800;
   --color-red: #c01818;
   --color-red-light: #ff6b6b;
   --color-blue: #0050b0;
-  --color-blue-light: #6fa3ef; /* readable blue for text on dark backgrounds */
-  --color-amber: #ffb020;
 
-  /* Colour roles. Layout rules below only use these; a theme in css/themes/
-     overrides them. The defaults reproduce the original gold look. */
+  /* Light tints of blue, red and gold for the header bars (black text on each
+     has a contrast ratio of at least 12.9). */
+  --color-blue-tint: #c9dcf5;
+  --color-red-tint: #f3c6c6;
+  --color-gold-tint: #f6e3a6;
+
+  /* Colour roles: the layout rules below use only these. */
   --role-title: var(--color-gold);
-  --role-heading: var(--color-gold);
-  --role-divider: linear-gradient(var(--color-gold), var(--color-gold));
-  --role-bar-background: var(--color-gold);
+  --role-heading: var(--color-text);
+  --role-divider: linear-gradient(90deg, var(--color-blue), var(--color-red), var(--color-gold));
+  --role-bar-background: linear-gradient(90deg, var(--color-blue-tint), var(--color-red-tint), var(--color-gold-tint));
   --role-bar-text: var(--color-background);
   --role-score: var(--color-gold);
   --role-points: var(--color-gold);
