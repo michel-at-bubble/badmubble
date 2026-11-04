@@ -19,6 +19,7 @@ Static HTML, CSS and vanilla JavaScript (ES modules), with no backend, framework
 ```
 index.html                  page shell
 css/                        project-specific styling
+images/                     logo (512 px web version) and favicons
 js/domain/                  pure logic: data contract, validation (no DOM, no network)
 docs/                       data contract
 templates/                  empty spreadsheet template (headers only)

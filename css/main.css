@@ -1,5 +1,16 @@
 /* Project-specific styling for Badmubble. Shared styling belongs in blood-bowl-nl-assets. */
 
+/* Palette sampled from images/badmubble-logo-512.jpg */
+:root {
+  --color-background: #0a0a0a;
+  --color-surface: #161616;
+  --color-text: #f2f2f2;
+  --color-gold: #f0c018;
+  --color-gold-deep: #d8a800;
+  --color-red: #c01818;
+  --color-blue: #0050b0;
+}
+
 *,
 *::before,
 *::after {
@@ -10,10 +21,24 @@ body {
   margin: 0;
   font-family: system-ui, sans-serif;
   line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-background);
 }
 
 main {
   max-width: 60rem;
   margin: 0 auto;
   padding: 1rem;
+  text-align: center;
+}
+
+.site-logo {
+  display: block;
+  width: min(100%, 24rem);
+  height: auto;
+  margin: 1rem auto;
+}
+
+h1 {
+  color: var(--color-gold);
 }
