@@ -1,11 +1,11 @@
 /* Option C, "Neutral": black, white and grey carry the page; Utrecht blue and
-   Amersfoort gold appear only as equal small accents (the split divider,
+   Amersfoort gold appear only as equal small accents (the gradient divider,
    scores in blue, points in gold). */
 
 :root {
   --role-title: #ffffff;
   --role-heading: #ffffff;
-  --role-divider: linear-gradient(90deg, var(--color-blue) 50%, var(--color-gold) 50%);
+  --role-divider: linear-gradient(90deg, var(--color-blue), var(--color-gold));
   --role-bar-background: #2b2b2b;
   --role-bar-text: #ffffff;
   --role-score: var(--color-blue-light);
