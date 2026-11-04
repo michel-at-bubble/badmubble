@@ -1,0 +1,9 @@
+{
+  "name": "badmubble",
+  "private": true,
+  "description": "Badmubble Blood Bowl league website",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}
