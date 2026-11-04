@@ -1,6 +1,6 @@
 # Badmubble
 
-Website for **Badmubble**, a small round-robin Blood Bowl league in the Blood-Bowl.nl ecosystem.
+Website for the **Bad Mubble League** (repository: `badmubble`), a small round-robin Blood Bowl league in the Blood-Bowl.nl ecosystem.
 
 Will be hosted at `https://badmubble.blood-bowl.nl` (GitHub Pages; not configured yet).
 
