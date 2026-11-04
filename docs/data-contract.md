@@ -90,9 +90,14 @@ Validation is generic: it does not assume a number of coaches, rounds or a parti
 
 Matching of `match_id` values (duplicates and `winner:` references) is exact and case-sensitive.
 
+Rows where every cell is empty are ignored. Every other row is validated. Issues refer to the spreadsheet row number, with the header as row 1. If a contract column is missing, only the missing columns are reported and rows are not validated.
+
+Run `npm run check-sheet` to validate the live sheet.
+
 ## Spreadsheet practice
 
 - Import the template via *File → Import → Upload*, then rename the worksheet to `Matches`.
 - Format all columns as **Plain text** (*Format → Number → Plain text*). Otherwise Google Sheets converts `2026-01` and `2026-01-15` into dates and changes how they are exported. The application reports such values as invalid rather than guessing what was meant.
 - Spell coach names the same way on every row. Names are compared as text, so a spelling difference creates a different coach. A data-validation dropdown in the sheet helps here.
-- The sheet must be shared as "anyone with the link: viewer" before the website can read it (a future phase).
+- The sheet must be shared as "anyone with the link: viewer", otherwise the website cannot read it.
+- The website reads the worksheet whose `gid` is set in `js/config.js` (currently `0`, the first worksheet). If the `Matches` worksheet is moved or recreated, check its `gid` (shown as `#gid=…` in the sheet URL).

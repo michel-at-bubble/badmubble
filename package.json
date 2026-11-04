@@ -4,6 +4,7 @@
   "description": "Badmubble Blood Bowl league website",
   "type": "module",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "check-sheet": "node scripts/check-sheet.js"
   }
 }
