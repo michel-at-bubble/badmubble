@@ -30,11 +30,16 @@
   </header>
 
   <main>
+    <section aria-labelledby="standings-heading">
+      <h2 id="standings-heading" data-i18n="standingsHeading">Stand</h2>
+      <div id="standings-content" aria-live="polite">
+        <noscript><p class="notice">Deze pagina heeft JavaScript nodig. / This page requires JavaScript.</p></noscript>
+      </div>
+    </section>
+
     <section aria-labelledby="schedule-heading">
       <h2 id="schedule-heading" data-i18n="scheduleHeading">Speelschema</h2>
-      <div id="schedule-content" aria-live="polite">
-        <noscript><p class="notice">Het speelschema heeft JavaScript nodig. / The schedule requires JavaScript.</p></noscript>
-      </div>
+      <div id="schedule-content"></div>
     </section>
   </main>
 

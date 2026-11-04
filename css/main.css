@@ -262,6 +262,77 @@ h2 {
   color: var(--color-text-muted);
 }
 
+/* Standings */
+
+.table-scroll {
+  overflow-x: auto;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+}
+
+.table-scroll:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.standings {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.standings th,
+.standings td {
+  padding: 0.5rem 0.6rem;
+  text-align: center;
+  border-top: 1px solid var(--color-border);
+}
+
+.standings thead th {
+  font-size: 0.85rem;
+  color: var(--color-background);
+  background: var(--color-gold);
+  border-top: none;
+}
+
+.standings abbr {
+  text-decoration: none;
+  cursor: help;
+}
+
+.standings .col-coach {
+  text-align: left;
+  font-weight: 600;
+  width: 100%;
+}
+
+.standings tbody .col-position,
+.standings tbody .col-pair {
+  color: var(--color-text-muted);
+}
+
+.standings tbody .col-points {
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
+.standings-progress {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+}
+
+.standings-note {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+main > section + section {
+  margin-top: 2rem;
+}
+
 /* Data issues */
 
 .issues {
@@ -296,6 +367,17 @@ h2 {
 }
 
 @media (max-width: 30rem) {
+  /* Keep points and net visible without scrolling; the for/against detail is
+     summarised by the net column. */
+  .standings .col-pair {
+    display: none;
+  }
+
+  .standings th,
+  .standings td {
+    padding: 0.5rem 0.4rem;
+  }
+
   .match-line {
     gap: 0.5rem;
   }

@@ -79,5 +79,17 @@ Done:
 - Phase 1: repository skeleton, `Matches` data contract, spreadsheet template, match validation.
 - Phase 2: reading the sheet (CSV export, parser, loader), `check-sheet` helper.
 - Phase 3: bilingual schedule page with results, playoff slots and data-issue reporting.
+- Phase 4: group standings.
 
-Not yet implemented: standings, tiebreakers, playoff qualification, deployment.
+Not yet implemented: playoff qualification, deployment.
+
+## Competition rules
+
+Implemented in `js/domain/standings.js` and `js/domain/competition-rules.js`:
+
+- Win 3, draw 1, loss 0 points. The result is decided by touchdowns.
+- Equal points are separated by net TD + net CAS (one combined value).
+- No further tiebreakers have been established. Coaches still level share a position (shown as `1=`) and are listed alphabetically for display only.
+- Only complete group matches without validation issues count. Partial results and playoff matches never count.
+
+Not yet established: tiebreakers beyond net TD + net CAS, and how a shared position at the qualification boundary (4th/5th) is resolved.

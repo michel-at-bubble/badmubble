@@ -2,16 +2,8 @@
 
 import { RESULT_STATUS } from "../domain/match-contract.js";
 import { buildScheduleSections, issuesByRow } from "../domain/schedule.js";
+import { element } from "./dom.js";
 import { describeSlot, formatDate, formatMonth, sectionTitle } from "./i18n.js";
-
-function element(tag, { className, text, attributes } = {}, children = []) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text !== undefined) node.textContent = text;
-  for (const [name, value] of Object.entries(attributes ?? {})) node.setAttribute(name, value);
-  node.append(...children);
-  return node;
-}
 
 function renderParticipant(match, side, translate) {
   const coach = match[`${side}_coach`];

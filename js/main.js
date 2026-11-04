@@ -1,10 +1,12 @@
-// Entry point: picks the language, loads the sheet and renders the schedule.
+// Entry point: picks the language, loads the sheet and renders standings and schedule.
 
 import { MATCHES_SHEET } from "./config.js";
 import { loadMatches } from "./data/matches-source.js";
 import { LANGUAGES, createTranslator, resolveLanguage } from "./ui/i18n.js";
 import { renderLoadError, renderLoading, renderSchedule } from "./ui/schedule-view.js";
+import { renderStandings } from "./ui/standings-view.js";
 
+const standingsContainer = document.querySelector("#standings-content");
 const scheduleContainer = document.querySelector("#schedule-content");
 const languageButtons = document.querySelectorAll("[data-language]");
 
@@ -12,7 +14,7 @@ let language = resolveLanguage({
   search: window.location.search,
   preferredLanguages: navigator.languages ?? [navigator.language],
 });
-let schedule = null;
+let data = null;
 
 function translateStaticText(translate) {
   document.documentElement.lang = language;
@@ -27,7 +29,10 @@ function translateStaticText(translate) {
 function render() {
   const translate = createTranslator(language);
   translateStaticText(translate);
-  if (schedule) renderSchedule(scheduleContainer, schedule, { language, translate });
+  if (data) {
+    renderStandings(standingsContainer, data, { translate });
+    renderSchedule(scheduleContainer, data, { language, translate });
+  }
 }
 
 function setLanguage(next) {
@@ -39,15 +44,16 @@ function setLanguage(next) {
   render();
 }
 
+// Loading and error messages appear once, in the first section.
 async function load() {
-  const translate = createTranslator(language);
-  renderLoading(scheduleContainer, translate);
+  renderLoading(standingsContainer, createTranslator(language));
+  scheduleContainer.replaceChildren();
   try {
-    schedule = await loadMatches(MATCHES_SHEET);
+    data = await loadMatches(MATCHES_SHEET);
     render();
   } catch (error) {
     console.error(error);
-    renderLoadError(scheduleContainer, createTranslator(language), load);
+    renderLoadError(standingsContainer, createTranslator(language), load);
   }
 }
 
