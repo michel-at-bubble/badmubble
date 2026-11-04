@@ -1,0 +1,19 @@
+/* Option E: off-white header bars (white is on both city shields) with the
+   gradient as a thin line along their bottom edge.
+   Header divider: blue-red-gold gradient. Other roles as option A. */
+
+:root {
+  --role-title: var(--color-gold);
+  --role-heading: var(--color-text);
+  --role-divider: linear-gradient(90deg, var(--color-blue), var(--color-red), var(--color-gold));
+  --role-bar-background: var(--role-divider) bottom / 100% 3px no-repeat, #f2f2f2;
+  --role-bar-text: var(--color-background);
+  --role-score: var(--color-gold);
+  --role-points: var(--color-gold);
+  --role-link: var(--color-gold);
+  --role-toggle-background: var(--color-gold);
+  --role-toggle-text: var(--color-background);
+  --role-focus: var(--color-gold);
+  --role-warning: var(--color-red);
+  --role-warning-text: var(--color-red-light);
+}
